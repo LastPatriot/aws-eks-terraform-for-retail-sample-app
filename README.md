@@ -68,7 +68,7 @@ The project uses Terraform variables to allow for customization. The values for 
 -   **`public_subnet_cidr`**: A list of CIDR blocks for your public subnets.
 -   **`private_subnet_cidr`**: A list of CIDR blocks for your private subnets.
 
-<img width="1509" height="497" alt="Screenshot 2025-09-19 at 20 16 04" src="https://github.com/user-attachments/assets/d200a48a-068e-4ea2-af81-1e048702784e" />
+<img width="1509" height="687" alt="Screenshot 2025-09-19 at 20 17 56" src="https://github.com/user-attachments/assets/39968757-6b67-4178-a6ba-ebcda7987171" />
 
 -   **`region`**: The AWS region where resources will be deployed.
 -   **`availability_zones`**: A list of availability zones to use within the specified region.
