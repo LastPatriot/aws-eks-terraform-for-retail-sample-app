@@ -125,29 +125,6 @@ After Terraform has successfully applied the configuration, you'll need to confi
 
 ---
 
-## Destroying the Infrastructure
-
-When you no longer need the EKS cluster and its associated resources, you can destroy them to avoid incurring further AWS charges.
-
-1.  **Destroy Terraform Resources**:
-    Navigate to the root directory of the project (`aws-eks-terraform/`) and run:
-    ```bash
-    terraform destroy
-    ```
-    Terraform will show you a plan of the resources to be destroyed and ask for confirmation. Type `yes` and press Enter to proceed.
-
-    **Note**: Ensure that your S3 backend state is properly managed. If you have versioning or other settings on your S3 bucket, they might affect the destruction process.
-
-## Important Considerations
-
--   **IAM Permissions**: The IAM user or role running Terraform must have sufficient permissions to create and manage all the AWS resources defined in this project.
--   **State Management**: Using an S3 backend with DynamoDB for locking is highly recommended for production environments to ensure state consistency and prevent concurrent modifications.
--   **Security Groups**: Pay close attention to the security group configurations within the VPC module to ensure proper network access control for your EKS cluster and nodes.
--   **Cost**: Be mindful of the AWS costs associated with running EKS clusters and related resources. Remember to destroy the infrastructure when it's no longer needed.
--   **Provider Versions**: The `.terraform.lock.hcl` files ensure that you are using the exact provider versions specified, which helps in maintaining consistent deployments.
-
----
-
 ## Deployment of the Retail Sample APP
 
 This deployment method will run the application in an existing Kubernetes cluster.
@@ -174,3 +151,28 @@ This deployment method will run the application in an existing Kubernetes cluste
     kubectl get svc ui
     ```
     The output of this command will provide the external URL for the frontend load balancer.
+
+---
+
+## Destroying the Infrastructure
+
+When you no longer need the EKS cluster and its associated resources, you can destroy them to avoid incurring further AWS charges.
+
+1.  **Destroy Terraform Resources**:
+    Navigate to the root directory of the project (`aws-eks-terraform/`) and run:
+    ```bash
+    terraform destroy
+    ```
+    Terraform will show you a plan of the resources to be destroyed and ask for confirmation. Type `yes` and press Enter to proceed.
+
+    **Note**: Ensure that your S3 backend state is properly managed. If you have versioning or other settings on your S3 bucket, they might affect the destruction process.
+
+## Important Considerations
+
+-   **IAM Permissions**: The IAM user or role running Terraform must have sufficient permissions to create and manage all the AWS resources defined in this project.
+-   **State Management**: Using an S3 backend with DynamoDB for locking is highly recommended for production environments to ensure state consistency and prevent concurrent modifications.
+-   **Security Groups**: Pay close attention to the security group configurations within the VPC module to ensure proper network access control for your EKS cluster and nodes.
+-   **Cost**: Be mindful of the AWS costs associated with running EKS clusters and related resources. Remember to destroy the infrastructure when it's no longer needed.
+-   **Provider Versions**: The `.terraform.lock.hcl` files ensure that you are using the exact provider versions specified, which helps in maintaining consistent deployments.
+
+---
