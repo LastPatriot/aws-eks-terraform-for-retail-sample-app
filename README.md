@@ -179,3 +179,92 @@ When you no longer need the EKS cluster and its associated resources, you can de
 -   **Provider Versions**: The `.terraform.lock.hcl` files ensure that you are using the exact provider versions specified, which helps in maintaining consistent deployments.
 
 ---
+
+## Creating a Read-Only User for EKS
+
+This section outlines the steps to create an IAM user with read-only access to your EKS cluster. This is useful for granting visibility to users or applications without allowing them to make changes.
+
+### Steps:
+
+1.  **Create an IAM Policy:**
+    Define an IAM policy that grants `eks:Describe*` and `eks:List*` permissions. You can use the provided `eks-developer-readonly.json` file for this purpose.
+
+    ```json
+    aws-iam create-policy --policy-name EKSDeveloperReadOnlyPolicy --policy-document file://path/to/eks-developer-readonly.json
+    ```
+    *Note: Replace `path/to/eks-developer-readonly.json` with the actual path to the file.*
+
+2.  **Create an IAM User:**
+    Create a new IAM user that will have read-only access.
+
+    ```bash
+    aws iam create-user --user-name developer-readonly
+    ```
+
+3.  **Attach the IAM Policy to the User:**
+    Attach the read-only policy created in Step 1 to the `developer-readonly` user.
+
+    ```bash
+    aws iam attach-user-policy --user-name developer-readonly --policy-arn arn:aws:iam::932263135322:policy/EKSDeveloperReadOnlyPolicy
+    ```
+    *Note: Replace `932263135322` with your AWS account ID if it differs.*
+
+4.  **Create a Kubernetes ClusterRole:**
+    Define a Kubernetes `ClusterRole` that grants `get`, `list`, and `watch` permissions on all API groups and resources. This is defined in `read-only-clusterrole.yaml`.
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: read-only-clusterrole
+    rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["get", "list", "watch"]
+    ```
+
+5.  **Create an IAM Identity Mapping:**
+    Use `eksctl` to create an IAM identity mapping, associating the IAM user with a Kubernetes group. This allows the IAM user to assume the role of a user within a specific group in Kubernetes. The provided script `iamidentitymapping.sh` can be used for this.
+
+    ```bash
+    eksctl create iamidentitymapping \
+      --cluster project-bedrock \
+      --region us-east-1 \
+      --arn "arn:aws:iam::932263135322:user/developer-readonly" \
+      --username "developer-readonly" \
+      --group "read-only-group"
+    ```
+    *Note: Ensure `project-bedrock` is your cluster name and `us-east-1` is your cluster region.*
+
+6.  **Create a ClusterRoleBinding:**
+    Create a `ClusterRoleBinding` to bind the `read-only-group` (created in the previous step) to the `read-only-clusterrole` (defined in Step 4). This is defined in `read-only-clusterrolebinding.yaml`.
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: read-only-clusterrolebinding
+    subjects:
+    - kind: Group
+      name: "read-only-group" # This name must match the group name used in Step 5
+      apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole
+      name: read-only-clusterrole # This name must match the ClusterRole created in Step 4
+      apiGroup: rbac.authorization.k8s.io
+    ```
+
+After completing these steps, the `developer-readonly` IAM user will be able to access the EKS cluster with read-only permissions.
+
+---
+
+--
+
+## Important Considerations
+
+-   **IAM Permissions**: The IAM user or role running Terraform must have sufficient permissions to create and manage all the AWS resources defined in this project.
+-   **State Management**: Using an S3 backend with DynamoDB for locking is highly recommended for production environments to ensure state consistency and prevent concurrent modifications.
+-   **Security Groups**: Pay close attention to the security group configurations within the VPC module to ensure proper network access control for your EKS cluster and nodes.
+-   **Cost**: Be mindful of the AWS costs associated with running EKS clusters and related resources. Remember to destroy the infrastructure when it's no longer needed.
+
+---

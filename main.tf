@@ -11,25 +11,24 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "eks-retail-sample-app-bucket"
+# resource "aws_s3_bucket" "terraform_state" {
+#   bucket = "eks-retail-sample-app-bucket"
 
-  lifecycle {
-    prevent_destroy = false
+#   lifecycle {
+#     prevent_destroy = false
+#   }
+# }
+
+terraform {
+  backend "s3" {
+    bucket       = "eks-retail-sample-app-bucket"
+    key          = "dev/terraform-state-file"
+    use_lockfile = true
+    encrypt      = true
+    region       = "us-east-1"
   }
 }
 
-# Take this out the first time you run it
-# terraform {
-#   backend "s3" {
-#     bucket       = "eks-retail-sample-app-bucket"
-#     key          = "dev/terraform-state-file"
-#     use_lockfile = true
-#     encrypt = true
-#     region       = "us-east-1"
-#   }
-# }
-#
 
 module "vpc" {
   source = "./modules/vpc"
