@@ -18,6 +18,10 @@ b.   **EKS Cluster**: An EKS cluster named `project-bedrock` is provisioned with
 
 c.   **State Management**: Terraform state is stored remotely in an S3 bucket named `eks-retail-sample-app-bucket` in the `us-east-1` region.
 
+---
+
+## **PS: Kindly find instructions on how to deploy the infrastructure and application [here](https://github.com/LastPatriot/aws-eks-terraform-for-retail-sample-app)**.
+
 
 ---
 
