@@ -23,7 +23,7 @@ availability_zones = [
 
 eks_cluster_name = "project-bedrock" #Provide your EKS cluster name.
 
-cluster_version = "1.30"
+cluster_version = "1.31"
 
 node_groups = {
   default = {
