@@ -22,7 +22,6 @@ c.   **State Management**: Terraform state is stored remotely in an S3 bucket na
 
 ## **PS: Kindly find instructions on how to deploy the infrastructure and application [here](https://github.com/LastPatriot/aws-eks-terraform-for-retail-sample-app)**.
 
-
 ---
 
 ### 2. Credentials and Kubeconfig for Read-Only Developer IAM User
