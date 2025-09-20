@@ -25,9 +25,7 @@ c.   **State Management**: Terraform state is stored remotely in an S3 bucket na
 
 This section details the setup for a read-only developer IAM user.
 
-**Read-Only Developer IAM User Setup:**
-
-"To ensure secure access for development and monitoring, a dedicated IAM user with read-only permissions for EKS resources is configured.
+To ensure secure access for development and monitoring, a dedicated IAM user with read-only permissions for EKS resources is configured.
 
 **A. IAM User Creation:**
 
