@@ -51,3 +51,25 @@ jobs:
       - name: "Terraform Apply"
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve -input=false
+
+      # --- Begin new steps for EKS deployment ---
+      # Configure kubectl to connect to the new EKS cluster
+      - name: "Configure Kubeconfig"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name project-bedrock
+
+      # Deploy the sample application to the EKS cluster
+      - name: "Deploy Application"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: kubectl apply -f https://github.com/aws-containers/retail-store-sample-app/releases/latest/download/kubernetes.yaml
+
+      # Wait for all deployments to be ready
+      - name: "Wait for Deployments"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: kubectl wait --for=condition=available deployments --all --timeout=120s
+
+      # Get the service information to confirm deployment
+      - name: "Get Service Info"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: kubectl get svc ui
+      # --- End new steps for EKS deployment ---

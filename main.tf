@@ -21,11 +21,11 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket       = "eks-retail-sample-app-bucket"
-    key          = "dev/terraform-state-file"
-    use_lockfile = true
-    encrypt      = true
-    region       = "us-east-1"
+    bucket = "eks-retail-sample-app-bucket"
+    key    = "dev/terraform-state-file"
+    # use_lockfile = true
+    encrypt = true
+    region  = "us-east-1"
   }
 }
 
