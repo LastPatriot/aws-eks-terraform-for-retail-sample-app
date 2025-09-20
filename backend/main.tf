@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 # resource "aws_s3_bucket" "terraform_state" {
-#   bucket = "" #Give your bucket a name
+#   bucket = "eks-retail-sample-app-bucket" #Give your bucket a name
 
 #   lifecycle {
 #     prevent_destroy = false
@@ -25,7 +25,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "" #The name of the previously created bucket
+    bucket = "eks-retail-sample-app-bucket" #The name of the previously created bucket
     key    = "dev/terraform-state-file.tfstate"
     # use_lockfile = true
     encrypt = true

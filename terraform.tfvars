@@ -21,7 +21,7 @@ availability_zones = [
   "us-east-1c"
 ]
 
-eks_cluster_name = "" #Provide your EKS cluster name.
+eks_cluster_name = "project-bedrock" #Provide your EKS cluster name.
 
 cluster_version = "1.30"
 
