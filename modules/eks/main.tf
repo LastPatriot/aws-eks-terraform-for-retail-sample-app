@@ -1,22 +1,22 @@
 # IAM Role for EKS cluster
 
-# resource "aws_iam_role" "eks-cluster-role" {
-#   name = "${var.eks_cluster_name}-eks-cluster-role"
+resource "aws_iam_role" "eks-cluster-role" {
+  name = "${var.eks_cluster_name}-eks-cluster-role"
 
-#   assume_role_policy = jsonencode(
-#     {
-#       Version = "2012-10-17",
+  assume_role_policy = jsonencode(
+    {
+      Version = "2012-10-17",
 
-#       Statement = [{
-#         Action = "sts:AssumeRole",
-#         Effect = "Allow",
-#         Principal = {
-#           Service = "eks.amazonaws.com"
-#         }
-#       }]
-#     }
-#   )
-# }
+      Statement = [{
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "eks.amazonaws.com"
+        }
+      }]
+    }
+  )
+}
 
 # Attach EKS cluster policy to Cluster Role
 
@@ -45,23 +45,23 @@ resource "aws_eks_cluster" "main-eks-cluster" {
 
 # IAM role for Worker Node
 
-# resource "aws_iam_role" "eks-node-role" {
-#   name = "${var.eks_cluster_name}-node-role"
+resource "aws_iam_role" "eks-node-role" {
+  name = "${var.eks_cluster_name}-node-role"
 
-#   assume_role_policy = jsonencode(
-#     {
-#       Version = "2012-10-17",
+  assume_role_policy = jsonencode(
+    {
+      Version = "2012-10-17",
 
-#       Statement = [{
-#         Action = "sts:AssumeRole",
-#         Effect = "Allow",
-#         Principal = {
-#           Service = "ec2.amazonaws.com"
-#         }
-#       }]
-#     }
-#   )
-# }
+      Statement = [{
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }]
+    }
+  )
+}
 
 
 # Attach Required Policies to Worker Node role
